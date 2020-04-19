@@ -49,10 +49,12 @@ private extension Node where Context == HTML.BodyContext {
                                 .class("pure-u-md-1-1"),
                                 .a(
                                     .href(link.url),
+                                    .target(.blank),
                                     .icon(link.icon),
                                     .a(
                                         .class("social-media"),
                                         .href(link.url),
+                                        .target(.blank),
                                         .text(link.title)
                                     )
                                 )

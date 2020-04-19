@@ -13,9 +13,11 @@ private struct LascorbeTheme: HTMLFactory {
     
     func makeIndexHTML(for index: Index,
                        context: PublishingContext<Site>) throws -> HTML {
-        HTML(
+        var newIndex = index
+        newIndex.title = "Blog"
+        return HTML(
             .lang(context.site.language),
-            .head(for: context.site),
+            .head(for: newIndex, site: context.site),
             .body(
                 .grid(
                     .sidebar(for: context.site),
@@ -36,7 +38,7 @@ private struct LascorbeTheme: HTMLFactory {
     func makeSectionHTML(for section: Section<Site>, context: PublishingContext<Site>) throws -> HTML {
         HTML(
             .lang(context.site.language),
-            .head(for: context.site),
+            .head(for: section, site: context.site),
             .body(
                 .grid(
                     .sidebar(for: context.site),
@@ -50,7 +52,7 @@ private struct LascorbeTheme: HTMLFactory {
     func makeItemHTML(for item: Item<Site>, context: PublishingContext<Site>) throws -> HTML {
         HTML(
             .lang(context.site.language),
-            .head(for: context.site),
+            .head(for: item, site: context.site),
             .body(
                 .grid(
                     .sidebar(for: context.site),
@@ -65,7 +67,7 @@ private struct LascorbeTheme: HTMLFactory {
     func makePageHTML(for page: Page, context: PublishingContext<Site>) throws -> HTML {
         HTML(
             .lang(context.site.language),
-            .head(for: context.site),
+            .head(for: page, site: context.site),
             .body(
                 .grid(
                     .sidebar(for: context.site),
@@ -79,7 +81,7 @@ private struct LascorbeTheme: HTMLFactory {
     func makeTagListHTML(for page: TagListPage, context: PublishingContext<Site>) throws -> HTML? {
         HTML(
             .lang(context.site.language),
-            .head(for: context.site),
+            .head(for: page, site: context.site),
             .body(
                 .grid(
                     .sidebar(for: context.site),
@@ -95,7 +97,7 @@ private struct LascorbeTheme: HTMLFactory {
     func makeTagDetailsHTML(for page: TagDetailsPage, context: PublishingContext<Site>) throws -> HTML? {
         HTML(
             .lang(context.site.language),
-            .head(for: context.site),
+            .head(for: page, site: context.site),
             .body(
                 .grid(
                     .sidebar(for: context.site),

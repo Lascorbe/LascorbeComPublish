@@ -17,7 +17,8 @@ extension Node where Context == HTML.BodyContext {
                 .text("Generated using "),
                 .a(
                     .text("Publish"),
-                    .href("https://github.com/johnsundell/publish")
+                    .href("https://github.com/johnsundell/publish"),
+                    .target(.blank)
                 ),
                 .text(". 100% JavaScript-free.")
             ),
