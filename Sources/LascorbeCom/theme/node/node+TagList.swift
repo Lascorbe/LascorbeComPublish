@@ -11,7 +11,7 @@ extension Node where Context == HTML.BodyContext {
     static func tagList(for tags: [Tag], on site: LascorbeCom) -> Node {
         return .div(.class("mini-post-tags"), .forEach(tags) { tag in
             .a(
-                .class("mini-post-category post-category-\(tag.string.lowercased())"),
+                .class("mini-post-category mini-post-category-\(tag.string.lowercased())"),
                 .href(site.path(for: tag)),
                 .text(tag.string)
             )
