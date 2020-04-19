@@ -7,13 +7,11 @@ import Publish
 extension Node where Context == HTML.BodyContext {
     static func page(for page: Page, on site: LascorbeCom) -> Node {
         return .pageContent(
-            .h2(
-                .class("post-title"),
-                .text(page.title)
-            ),
+            .h1(.class("content-subhead"), .text(page.title)),
             .div(
-                .class("post-description"),
+                .class("page-description"),
                 .div(
+                    .class("post-description-text"),
                     .contentBody(page.body)
                 )
             )

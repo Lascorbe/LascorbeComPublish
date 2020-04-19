@@ -2,7 +2,9 @@
 title: About
 ---
 
-Hi! I'm Luis Ascorbe, a software developer with over 8 years of experience. 
+Hi! I'm Luis Ascorbe, a software developer living in Barcelona, with over 8 years of experience on Apple platforms development (iOS/macOS/watchOS/tvOS). I quit my job as iOS Lead at Wallapop at the end of 2019. After a few months of sabbatical, I'm looking for a new opportunity. If your company is hiring ping me!
+
+On my free time I learn about people and project managment, design, and new things on programming. Now I'm exploring SwiftUI and what can be achieved with it. I run a small conference called [NSSpain](http://nsspain.com) in Logroño, a small and beautiful city on the countryside of Spain ([nsspain.com](http://nsspain.com))
 
 You can catch me on Twitter (my DMs are open):
 
@@ -17,7 +19,3 @@ I've given some talks:
 - [Trend Setar at Freakend 2017 (ES)](https://www.youtube.com/watch?v=oU0Vs8D9tUg&list=PLKxa4AIfm4pUaVhRKxYErhAvjU9xqwZOb&index=14&t=0s)
 - [UI and Snapshot Testing at CMD+U Conf 2016 (EN)](https://academy.realm.io/posts/cmdu-conf-luis-ascorbe-ui-and-snapshottesting/)
 - Work flow in Wallapop at NSBarcelona in April 2016 (EN) (not recorded)
-
-Last but not least, I run a small conference called NSSpain in Logroño, a small and beautiful city on the countryside of Spain:
-
-- [nsspain.com](http://nsspain.com)

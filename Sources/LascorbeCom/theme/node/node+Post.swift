@@ -10,23 +10,17 @@ extension Node where Context == HTML.BodyContext {
         return .pageContent(
             .h2(
                 .class("post-title"),
-                .a(
-                    .href(item.path),
-                    .text(item.title)
-                )
-            ),
-            .p(
-                .class("post-meta"),
-                .text("⏱ \(item.metadata.timeToRead)")
+                .text(item.title)
             ),
             .p(
                 .class("post-meta"),
                 .text(dateAndTime)
             ),
-            .tagList(for: item, on: site),
+            .tagListPost(for: item, on: site),
             .div(
                 .class("post-description"),
                 .div(
+                    .class("description-text"),
                     .contentBody(item.body)
                 )
             )

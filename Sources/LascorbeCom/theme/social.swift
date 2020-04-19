@@ -12,7 +12,7 @@ extension SocialMedia {
     static var email: SocialMedia {
         return SocialMedia(
             title: "Email",
-            url: "mailto:website@ascor.be",
+            url: "mailto:hi+blog@ascor.be",
             icon: "far fa-envelope"
         )
     }
