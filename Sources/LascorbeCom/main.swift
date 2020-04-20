@@ -14,8 +14,8 @@ struct LascorbeCom: Website {
         var timeToRead: String
     }
 
-    var url = URL(string: "https://ascor.be")!
-    var name = "ascor.be"
+    var url = URL(string: "https://lascorbe.com")!
+    var name = "Luis Ascorbe"
     var description = "Software Developer. Tech Lead. Speaker. Conference Organizer."
     var language: Language { .english }
     var imagePath: Path? { nil }
