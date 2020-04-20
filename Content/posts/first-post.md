@@ -30,7 +30,7 @@ struct MainViewController_Preview: PreviewProvider {
 private struct ContainerView: UIViewControllerRepresentable {
     func makeUIViewController(context: UIViewControllerRepresentableContext<ContainerView>) -> MainViewController {
         return MainViewController()
-        }
+    }
 
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
 
