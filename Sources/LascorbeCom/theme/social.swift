@@ -40,4 +40,12 @@ extension SocialMedia {
             icon: "fab fa-linkedin"
         )
     }
+    
+    static var conference: SocialMedia {
+        return SocialMedia(
+            title: "[~]NSSpain",
+            url: "https://www.nsspain.com",
+            icon: ""
+        )
+    }
 }
