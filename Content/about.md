@@ -1,14 +1,14 @@
 ---
-title: About
+title: About Me
 ---
 
-Hi! I'm Luis Ascorbe, **a software developer living in Barcelona, with over 8 years of experience on Apple platforms development (iOS/macOS/watchOS/tvOS)**. I quit my job as iOS Lead at Wallapop at the end of 2019. After a few months of sabbatical, I'm looking for a new opportunity. If your company is hiring ping me!
+I'm Luis Ascorbe, **a software developer living in Barcelona with over 8 years of experience on Apple platforms development (iOS/macOS/watchOS/tvOS)**. I quit my job as iOS Lead at Wallapop at the end of 2019. After a few months of sabbatical, I'm looking for a new opportunity, so if your company is hiring ping me!
 
 In my free time, I learn about people and project management, design, and new things in programming. Now I'm exploring SwiftUI and what can be achieved with it. 
 
-I also **run a small conference called [NSSpain](http://nsspain.com)** in Logroño, a small and beautiful city in the countryside of Spain:
+I also **run a worldwide developers conference called [NSSpain](http://nsspain.com)** about programming for Apple platforms in Logroño, a small and beautiful city in the countryside of Spain:
 
-- ([nsspain.com](http://nsspain.com)).
+- [nsspain.com](http://nsspain.com)
 
 You can catch me on Twitter (my DMs are open):
 
