@@ -163,11 +163,13 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        let coordinator = NavigationMasterCoordinator(window: window)
-        return coordinator.coordinate(to: coordinator)
+        let coordinator = RootMasterCoordinator(window: window)
+        coordinate(to: coordinator)
     }
 }
 ```
+
+We're injecting the `UIWindow` through the `init`, and then passing it to  `MasterView`'s coordinator. 
 
 Next, we have to handle the presentation on the window. Let's go back to our `RootMasterCoordinator` and set up the `start()` function:
 
@@ -238,8 +240,8 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        let coordinator = NavigationMasterCoordinator(window: window)
-        return coordinator.coordinate(to: coordinator)
+        let coordinator = RootMasterCoordinator(window: window)
+        coordinate(to: coordinator)
     }
 }
 
@@ -407,10 +409,10 @@ final class AppCoordinator: Coordinator {
     init(window: UIWindow) {
         self.window = window
     }
-    
+  
     func start() {
-        let coordinator = NavigationMasterCoordinator(window: window)
-        return coordinator.coordinate(to: coordinator)
+        let coordinator = RootMasterCoordinator(window: window)
+        coordinate(to: coordinator)
     }
 }
 
@@ -485,7 +487,7 @@ struct MasterView: View {
 
 We've learned how to set up an entire screen with the MVP pattern, we created our base Coordinator and our first 2 coordinators, and we saw how to wrap our view in a `NavigationView` and how we can implement `NavigationLink` so it doesn't depend of anything else in the view.
 
-That's it! **We've completed part 1 of this series.** In the next post we're going to see how to extract that `NavigationLink`  from `MasterView` and put it in a new Coordinator. We'll have to modify our current base Coordinator protocol, are you going to miss it? 
+That's it! **We've completed part 1 of this series.** In the next post we're going to see how to extract that `NavigationLink`  from `MasterView` and put it in a new Coordinator. We'll have to modify our current base Coordinator protocol, and we're going to see how to easily change from a navigation push to a modal presentation without touching the view, are you going to miss it? 
 
 Thank you for reading, I hope you liked it.
 
