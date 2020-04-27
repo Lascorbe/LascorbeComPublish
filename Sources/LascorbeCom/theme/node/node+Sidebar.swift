@@ -51,7 +51,12 @@ private extension Node where Context == HTML.BodyContext {
                                     .href(link.url),
                                     .target(.blank),
                                     .icon(link.icon),
-                                    .text(link.title)
+                                    .a(
+                                        .class("social-media"),
+                                        .href(link.url),
+                                        .target(.blank),
+                                        .text(link.title)
+                                    )
                                 )
                             )
                         })

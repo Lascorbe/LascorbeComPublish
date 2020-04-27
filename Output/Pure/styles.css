@@ -260,6 +260,7 @@ h3 {
     max-width: 768px;
     width: 100%;
     height: auto;
+    border-radius: 5px;
 }
 .post-meta {
     color: #999;
