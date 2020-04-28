@@ -3,7 +3,7 @@ title: MVP + Coordinators in SwiftUI (part 1)
 timeToRead: 15 minutes
 date: 2020-04-27 12:00
 description: 1st part of exploring a MVP+Coordinators approach on SwiftUI without using UIKit.
-tags: swiftui, coordinator, mvp, article
+tags: swiftui, coordinator, mvp, article, series, part1
 ---
 
 ![](/images/posts/2020-04-26-MVPCoordinators-SwiftUI/1.jpg)
@@ -230,7 +230,19 @@ We've learned how to link everything together, the MVP with the coordinators, no
 This is what we've done so far:
 
 ```swift
-// MARK: Coordinators
+// MARK: Coordinator
+
+protocol Coordinator {
+    func start()
+}
+
+extension Coordinator {
+    func coordinate(to coordinator: Coordinator) {
+        coordinator.start()
+    }
+}
+
+// MARK: AppCoordinator
 
 final class AppCoordinator: Coordinator {
     private weak var window: UIWindow?
@@ -244,6 +256,10 @@ final class AppCoordinator: Coordinator {
         coordinate(to: coordinator)
     }
 }
+
+// MARK: MasterCoordinator
+
+protocol MasterCoordinator: Coordinator {}
 
 final class RootMasterCoordinator: MasterCoordinator {
     private weak var window: UIWindow?
@@ -401,7 +417,19 @@ Cool! We learned how to wrap our view in a `NavigationView` and how we can imple
 This is what we've done so far:
 
 ```swift
-// MARK: Coordinators
+// MARK: Coordinator
+
+protocol Coordinator {
+    func start()
+}
+
+extension Coordinator {
+    func coordinate(to coordinator: Coordinator) {
+        coordinator.start()
+    }
+}
+
+// MARK: AppCoordinator
 
 final class AppCoordinator: Coordinator {
     private weak var window: UIWindow?
@@ -415,6 +443,10 @@ final class AppCoordinator: Coordinator {
         coordinate(to: coordinator)
     }
 }
+
+// MARK: MasterCoordinator
+
+protocol MasterCoordinator: Coordinator {}
 
 final class RootMasterCoordinator: MasterCoordinator {
     private weak var window: UIWindow?
@@ -487,8 +519,11 @@ struct MasterView: View {
 
 We've learned how to set up an entire screen with the MVP pattern, we created our base Coordinator and our first 2 coordinators, and we saw how to wrap our view in a `NavigationView` and how we can implement `NavigationLink` so it doesn't depend of anything else in the view.
 
-That's it! **We've completed part 1 of this series.** In the next post we're going to see how to extract that `NavigationLink`  from `MasterView` and put it in a new Coordinator. We'll have to modify our current base Coordinator protocol, and we're going to see how to easily change from a navigation push to a modal presentation without touching the view, are you going to miss it? 
+That's it! **We've completed part 1 of this series.** In the next post we're going to see how to extract that `NavigationLink`  from `MasterView` and put it in a new Coordinator. We'll have to modify our current base Coordinator protocol, and we're going to see how to easily change from a navigation push to a modal presentation without touching the view, are you going to miss it? **Then head over to part 2!** 
+
+**Here's the link to the next part of the series (part 2)**: [https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2)
 
 Thank you for reading, I hope you liked it.
 
 Luis.
+
