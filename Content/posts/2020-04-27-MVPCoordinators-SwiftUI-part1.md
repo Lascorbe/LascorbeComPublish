@@ -2,7 +2,7 @@
 title: MVP + Coordinators in SwiftUI (part 1)
 timeToRead: 15 minutes
 date: 2020-04-27 12:00
-description: 1st part of exploring a MVP+Coordinators approach on SwiftUI without using UIKit.
+description: Blog series on exploring a MVP+Coordinators approach in SwiftUI without using UIKit. 1st part.
 tags: swiftui, coordinator, mvp, article, series, part1
 ---
 

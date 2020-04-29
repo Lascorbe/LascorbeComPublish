@@ -2,7 +2,7 @@
 title: MVP + Coordinators in SwiftUI (part 3)
 timeToRead: 15 minutes
 date: 2020-04-29 13:00
-description: 3rd part of exploring a MVP+Coordinators approach on SwiftUI without using UIKit.
+description: Blog series on exploring a MVP+Coordinators approach in SwiftUI without using UIKit. 3rd part.
 tags: swiftui, coordinator, mvp, article, series, part3, mixin, associatedobject
 ---
 
@@ -12,9 +12,11 @@ tags: swiftui, coordinator, mvp, article, series, part3, mixin, associatedobject
 
 Welcome back! This is the 3rd part of the series on creating an MVP+Coordinators app in SwiftUI. If you're **looking for the 1st part**, please go here: [lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1). If you're **looking for the 2nd part instead**, please go here: [lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2).
 
-In the first part we learned how to set up an entire screen with the MVP pattern, we created our base Coordinator and our first 2 coordinators, and we saw how to wrap our view in a `NavigationView` and how we can implement `NavigationLink` so it doesn't depend of anything else in the view.
+**In part 1**, we learned how to set up an entire screen with the MVP pattern, we created our base Coordinator and our first two coordinators, and we saw how to wrap our view in a `NavigationView` and how we can implement `NavigationLink` so it doesn't depend of anything else in the view.
 
-Now we're going to see how to extract that `NavigationLink`  from `MasterView`.
+**In part 2**, we learned how to extract `NavigationLink` from `MasterView` creating a handy new `NavigationButton` along the way. We saw how to setup the Coordinator protocol so we can return SwiftUI Views from the `start()` function. We learned how to change presenting a view as a modal instead of in a navigation stack. And we also saw how to present several views from the same view.
+
+In this part, the 3rd one, **we're going to reimplement our Coordinator protocol to store the identifier, parent and children of the coordinators. We'll also deal with a bit of memory management so we don't create retain cycles.** Sounds interesting? Then let's go!
 
 This is what we completed on the first part:
 
@@ -142,7 +144,7 @@ struct MasterView<T: MasterPresenting>: View {
 }
 ```
 
-## 4. 👾 Bonus: let's talk about Mixins
+## 1. 👾 Creating stored properties in a protocol
 
 Since we'll likely need to identify the coordinators and have access to their parents, let's go back to the `Coordinator` protocol and see how we can create store this. I have to confess I used a trick, I used the Objective-C runtime to store them, creating a *Mixin*:
 
@@ -371,16 +373,20 @@ struct MasterView<T: MasterPresenting>: View {
 
 We've learned how to extract that `NavigationLink` from our `MasterView` creating a handy new `NavigationButton` along the way. We saw how to setup our Coordinator so we can return SwiftUI Views from the `start()` function, and how to implement stored properies in protocol extensions creating a mixin. We learned how to easily change presenting a view as a modal instead of in a navigation stack, and we also learned how to present several views from the same view.
 
-That's it! **We've completed part 3 of this series.** I invite you to [take a look at the project I created](https://github.com/Lascorbe/SwiftUI-MVP-Coordinator), where the final implementation is, with more classes and examples, and both ways of navigating, with navigation stack and modals. There you can also take a look at `AssociatedObject.swift` and see how we can create stored properties under the hood.
+That's it! **We've completed part 3 of this series.** Now I invite you to [take a look at whole project I created](https://github.com/Lascorbe/SwiftUI-MVP-Coordinator), where the final implementation is, with more classes and examples, and both ways of navigating, navigation stack and modals. There you can also take a look at `AssociatedObject.swift` and see how we can create stored properties under the hood.
 
-We've finish our experimental MVP+Coordinators SwiftUI app, but **there're still a few considerations I wonder about**:
+We've finished our experimental MVP+Coordinators SwiftUI app, but **there're still a few considerations I wonder about**:
 
-- I didn't implement a way to navigate back from a coordinator, should there be one?
-- What about animations? Looks like right now it's not possible to modify the animation/transition of `NavigationLink` nor `.sheet` (or I didn't found it).
+- I didn't implement a way to navigate back from a coordinator, I guess there should be one, how should it work then?
 - A great challenge is the deeplinking, how would it work in this implementation?
-- Is this a good approach? Or the declarative nature of SwiftUI pushes us to use other design pattern/architecture like redux?
+- What about animations? Right now, it's not possible to modify the animation/transition of `NavigationLink` nor `.sheet`. Hopefully, Apple will make that possible in the next SwiftUI version.
+- Is this a good approach? Or the declarative nature of SwiftUI pushes us to use other design patterns/architectures, like redux?
 
-They all do look as good candidates for an upcoming post. **I hope you liked these [part 1](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1), [part 2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2) and [part 3](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2) posts covering my experience trying to decouple the navigation in SwftUI**. 
+They all do look as good candidates for an upcoming post 😏.
+
+Last but not least, I'd like to give a big thank you to my friends [Marin Todorov](https://twitter.com/icanzilb) and [Benedikt Terhechte](https://twitter.com/terhechte) for giving me early feedback about these blog posts 🙇🏻‍♂️, you're the best! 🤗
+
+**I hope you liked these [part 1](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1), [part 2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2) and [part 3](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2) posts covering my experience trying to decouple the navigation in SwftUI**. 
 
 Thank you for reading. Let me know what you think and share it with your friends!
 

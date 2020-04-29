@@ -2,7 +2,7 @@
 title: MVP + Coordinators in SwiftUI (part 2)
 timeToRead: 15 minutes
 date: 2020-04-28 13:00
-description: 2nd part of exploring a MVP+Coordinators approach on SwiftUI without using UIKit.
+description: Blog series on exploring a MVP+Coordinators approach in SwiftUI without using UIKit. 2nd part.
 tags: swiftui, coordinator, mvp, article, series, part2
 ---
 
@@ -183,7 +183,7 @@ struct MasterView: View {
 }
 ```
 
-We switched the `Button` that was there before with our newly created `NavigationButton`. Notice that now we don't have to have a property to store `isPresented`.
+We switched the `Button` that was there before with our newly created `NavigationButton`. Notice that now we don't have to have a property to store `isPresented` because that's now handled by `NavigationButton`.
 
 Now we can extract `NavigationLink`! Let's define what we really would like to have in the button in `MasterView`:
 
@@ -235,7 +235,7 @@ struct MasterView<T: MasterPresenting>: View { // hi there T!
 }
 ```
 
-We still don't want `MasterView` to know what `MasterPresenting` we are injecting, let's keep using the `MasterPresenting` protocol, this time as a generic one (`<T: MasterPresenting>`).
+We still don't want `MasterView` to know what `MasterPresenting` we are injecting, so let's keep using the `MasterPresenting` protocol, this time as a generic one (`<T: MasterPresenting>`).
 
 Perfect, now we can go to `MasterPresenter`'s coordinator and add the `presentDetailView` function. Remember we had a `MasterCoordinator` protocol which was empty? Not anymore:
 
@@ -250,14 +250,14 @@ extension MasterCoordinator: Coordinator {
 }
 ```
 
-Since `presentDetailView` is a *pure* function, we can add it as a default implementation to the `MasterCoordinator` protocol (isn't the `some` keword cool?).
+Since `presentDetailView` is a *pure* function, we can add it as a default implementation to the `MasterCoordinator` protocol (isn't the `some` keyword great?).
 
-Did you notice we have a new coordinator? `NavigationDetailCoordinator`! It's exactly where we're going to put the `NavigationLink`:
+By the way, did you notice we have a new coordinator? Yup, `NavigationDetailCoordinator`! It's exactly where we're going to put the `NavigationLink`:
 
 ```swift
 protocol DetailCoordinator: Coordinator {}
 
-final class NavigationDetailCoordinator: Coordinator {
+final class NavigationDetailCoordinator: DetailCoordinator {
     private var isPresented: Binding<Bool>
     
     init(isPresented: Binding<Bool>) {
@@ -272,7 +272,7 @@ final class NavigationDetailCoordinator: Coordinator {
 }
 ```
 
-Hmmm... but now we have a problem, we're returning a View from `start()`, but the `Coordinator` protocol implementation isn't returning anything.
+Hmmm... but now we have a problem, we're returning a View from `start()`, but the `Coordinator` protocol implementation isn't returning anything, we'll see what we have to do there.
 
 Great! We've seen how to extract that `NavigationLink` from our `MasterView` creating a handy new `NavigationButton` along the way. In the next section we're going to reimplement our base Coordinator to handle returning Views from `start()`.
 
@@ -402,9 +402,9 @@ struct MasterView<T: MasterPresenting>: View {
 
 ## 2. ⚡️ Changing base Coordinator's implementation
 
-We just saw how to extract the `NavigationLink` from our `MasterView` creating a handy new `NavigationButton` along the way. Now we're going to reimplement our base Coordinator to handle returning Views from `start()`.
+We just saw how to extract the `NavigationLink` from our `MasterView` creating a handy new `NavigationButton` along the way. Now we're going to reimplement our base Coordinator to return SwiftUI Views from `start()`.
 
-Let's change it then, this is our new `Coordinator` protocol:
+Let's change it, this is our new `Coordinator` protocol:
 
 ```swift
 protocol Coordinator {
@@ -414,7 +414,6 @@ protocol Coordinator {
 
 extension Coordinator {
     func coordinate<T: Coordinator>(to coordinator: T) -> some View {
-        coordinator.parent = self
         return coordinator.start()
     }
 }
@@ -467,7 +466,7 @@ final class MasterPresenter<C: MasterCoordinator>: MasterPresenting {
 }
 ```
 
-Check out the `some View` and `<C: MasterCoordinator>` parts, we have to add them because we are conforming to the `Coordinator` protocol now.
+Check out the `some View` and `<C: MasterCoordinator>` parts, we have to add them because we are conforming to the `Coordinator` protocol, which is generic now.
 
 Aaaand done! Now we can navigate from one view to another one without the `NavigationLink` in the view itself, wooo!
 
@@ -601,7 +600,7 @@ struct MasterView<T: MasterPresenting>: View {
 
 ## 3. 🚨 Switch from navigation to modal
 
-We've learned how we can navigate from one view to another one with `NavigationLink`, but what if I want to present the view as a modal? Well, I have a small trick for that, which is wrapping `.sheet` in a View:
+We've learned how we can navigate from one view to another one with `NavigationLink`, but what if I want to present the view as a modal? Remember the `.sheet` modifier we talked about in [part 1](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1)? Well, I have a small trick for that, which is wrapping `.sheet` in a View:
 
 ```swift
 struct ModalLink<T: View>: View {
@@ -617,7 +616,7 @@ struct ModalLink<T: View>: View {
 }
 ```
 
-`ModalLink` is a view that contains the `.sheet` modifier, so we can use it as a view instead of as a modifier. Now that we have something like `NavigationLink` but fo modal presentations, let's see how to use it.
+`ModalLink` is a view that contains the `.sheet` modifier, so we can use it as a view instead of as a modifier. Now that we have something like `NavigationLink` but for modal presentations, let's see how to use it.
 
 Let's go to `NavigationDetailCoordinator`, and change the implementation of `start()` to show the view as a modal, instead of a push on the navigation stack, like this:
 
@@ -693,15 +692,15 @@ final class MasterPresenter<C: MasterCoordinator>: MasterPresenting {
 }
 ```
 
-**In this section we saw how to easily change presenting a view as a modal instead of in a navigation stack. We also learned how to present several views from the same view.** And we've arrived to the end of part 2.
+In this section we saw how to easily change presenting a view as a modal instead of in a navigation stack. We also learned how to present several views from the same view. And we've arrived to the end of part 2.
 
-I'm not going to add the "what we've done so far" bit here because it's starting to get big. But I invite you to [take a look at the public repo I created](https://github.com/Lascorbe/SwiftUI-MVP-Coordinator), where the final implementation is, with more classes and examples, and both ways of navigating, with navigation stack and modals. 
+I'm not going to add the "what we've done so far" bit here because it's starting to get big. But I invite you to [take a look at the public repo where I'm doing all](https://github.com/Lascorbe/SwiftUI-MVP-Coordinator), where the final implementation is, with more classes and examples, and both ways of navigating, with navigation stack and modals. 
 
 ## 🏁 Conclusion
 
-We've learned how to extract that `NavigationLink` from our `MasterView` creating a handy new `NavigationButton` along the way. We saw how to setup our Coordinator so we can return SwiftUI Views from the `start()` function. We learned how to easily change presenting a view as a modal instead of in a navigation stack, and we also saw how to present several views from the same view.
+We've learned how to extract that `NavigationLink` from our `MasterView` creating a handy new `NavigationButton` along the way. We saw how to setup our Coordinator so we can return SwiftUI Views from the `start()` function. We learned how to easily change presenting a view as a modal instead of in a navigation stack. And we also saw how to present several views from the same view.
 
-That's it! **We've completed part 2 of this series.** In the next post we'll see how to reimplement our Coordinator protocol to store its identifier, parent and children. To do that, to create stored properies in protocol extensions, we'll create a mixin using the power of the Objective-C runtime, sounds cool? **Then stay tuned for part 3!**
+That's it! **We've completed part 2 of this series.** In the next post, part 3, we'll see how to reimplement our Coordinator protocol to store its identifier, parent and children. To do that, to create stored properies in protocol extensions, we'll create a mixin using the power of the Objective-C runtime, sounds cool? **Then stay tuned for part 3!**
 
 I hope you liked [part 1](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1) and [part 2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2) covering my experience trying to decouple the navigation in SwftUI.
 
