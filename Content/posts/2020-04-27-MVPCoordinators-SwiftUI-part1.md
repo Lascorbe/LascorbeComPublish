@@ -177,7 +177,7 @@ Next, we have to handle the presentation on the window. Let's go back to our `Ro
 final class RootMasterCoordinator: MasterCoordinator {
     private weak var window: UIWindow?
     
-    init(window: UIWindow) {
+    init(window: UIWindow?) {
         self.window = window
     }
     
@@ -264,7 +264,7 @@ protocol MasterCoordinator: Coordinator {}
 final class RootMasterCoordinator: MasterCoordinator {
     private weak var window: UIWindow?
     
-    init(window: UIWindow) {
+    init(window: UIWindow?) {
         self.window = window
     }
     
@@ -343,7 +343,7 @@ So first, we're going to move `NavigationView` out. Where should it go? Yup, the
 final class RootMasterCoordinator: MasterCoordinator {
     private weak var window: UIWindow?
     
-    init(window: UIWindow) {
+    init(window: UIWindow?) {
         self.window = window
     }
     
@@ -451,7 +451,7 @@ protocol MasterCoordinator: Coordinator {}
 final class RootMasterCoordinator: MasterCoordinator {
     private weak var window: UIWindow?
     
-    init(window: UIWindow) {
+    init(window: UIWindow?) {
         self.window = window
     }
     
@@ -521,7 +521,7 @@ We've learned how to set up an entire screen with the MVP pattern, we created ou
 
 That's it! **We've completed part 1 of this series.** In the next post we're going to see how to extract that `NavigationLink`  from `MasterView` and put it in a new Coordinator. We'll have to modify our current base Coordinator protocol, and we're going to see how to easily change from a navigation push to a modal presentation without touching the view, are you going to miss it? **Then head over to part 2!** 
 
-**Here's the link to the next part of the series (part 2)**: [https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2)
+**Go now to the next part of the series (part 2)!**: [https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2)
 
 Thank you for reading, I hope you liked it.
 

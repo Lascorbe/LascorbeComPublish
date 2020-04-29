@@ -53,7 +53,7 @@ protocol MasterCoordinator: Coordinator {}
 final class RootMasterCoordinator: MasterCoordinator {
     private weak var window: UIWindow?
     
-    init(window: UIWindow) {
+    init(window: UIWindow?) {
         self.window = window
     }
     
@@ -93,6 +93,7 @@ final class MasterPresenter: MasterPresenting {
     
     init(coordinator: MasterCoordinator) {
         self.coordinator = coordinator
+        self.viewModel = MasterViewModel(date: Date())
     }
 }
 
@@ -212,6 +213,7 @@ final class MasterPresenter: MasterPresenting {
     
     init(coordinator: MasterCoordinator) {
         self.coordinator = coordinator
+        self.viewModel = MasterViewModel(date: Date())
     }
   
   	// using `some` we don't have to specify the MasterPresenting's associatedtype
@@ -242,7 +244,7 @@ Perfect, now we can go to `MasterPresenter`'s coordinator and add the `presentDe
 ```swift
 protocol MasterCoordinator: Coordinator {}
 
-extension MasterCoordinator: Coordinator {
+extension MasterCoordinator {
     func presentDetailView(isPresented: Binding<Bool>) -> some View {
         let coordinator = NavigationDetailCoordinator(isPresented: isPresented)
         return coordinate(to: coordinator)
@@ -311,7 +313,7 @@ final class AppCoordinator: Coordinator {
 
 protocol MasterCoordinator: Coordinator {}
 
-extension MasterCoordinator: Coordinator {
+extension MasterCoordinator {
     func presentDetailView(isPresented: Binding<Bool>) -> some View {
         let coordinator = NavigationDetailCoordinator(isPresented: isPresented)
         return coordinate(to: coordinator)
@@ -321,7 +323,7 @@ extension MasterCoordinator: Coordinator {
 final class RootMasterCoordinator: MasterCoordinator {
     private weak var window: UIWindow?
     
-    init(window: UIWindow) {
+    init(window: UIWindow?) {
         self.window = window
     }
     
@@ -381,6 +383,7 @@ final class MasterPresenter: MasterPresenting {
     
     init(coordinator: MasterCoordinator) {
         self.coordinator = coordinator
+        self.viewModel = MasterViewModel(date: Date())
     }
   
     func onButtonPressed(isPresented: Binding<Bool>) -> some View { 
@@ -390,12 +393,30 @@ final class MasterPresenter: MasterPresenting {
 
 struct MasterView<T: MasterPresenting>: View {
     @ObservedObject var presenter: T
-  
+    
     var body: some View {
-        NavigationButton(contentView: Text("\(viewModel.date, formatter: dateFormatter)") ,
+        NavigationButton(contentView: Text("\(presenter.viewModel.date, formatter: dateFormatter)"),
                          navigationView: { isPresented in
-                             self.presenter.onButtonPressed(isPresented: $isPresented)
+                            self.presenter.onButtonPressed(isPresented: isPresented)
         })
+    }
+}
+
+struct NavigationButton<CV: View, NV: View>: View {
+    @State private var isPresented = false
+    
+    var contentView: CV
+    var navigationView: (Binding<Bool>) -> NV
+    
+    var body: some View {
+        Button(action: {
+            self.isPresented = true
+        }) {
+            contentView
+                .background(
+                    navigationView($isPresented)
+            )
+        }
     }
 }
 ```
@@ -429,7 +450,7 @@ final class AppCoordinator: Coordinator {
     
     @discardableResult // discardableResult let us avoid capturing whatever it returns
     func start() -> some View {
-        let coordinator = NavigationMasterCoordinator(window: window)
+        let coordinator = RootMasterCoordinator(window: window)
         return coordinate(to: coordinator)
     }
 }
@@ -460,6 +481,7 @@ final class MasterPresenter<C: MasterCoordinator>: MasterPresenting {
     
     init(coordinator: C) {
         self.coordinator = coordinator
+        self.viewModel = MasterViewModel(date: Date())
     }
   
     {...}
@@ -499,7 +521,7 @@ final class AppCoordinator: Coordinator {
     
     @discardableResult
     func start() -> some View {
-        let coordinator = NavigationMasterCoordinator(window: window)
+        let coordinator = RootMasterCoordinator(window: window)
         return coordinate(to: coordinator)
     }
 }
@@ -508,9 +530,9 @@ final class AppCoordinator: Coordinator {
 
 protocol MasterCoordinator: Coordinator {}
 
-extension MasterCoordinator: Coordinator {
+extension MasterCoordinator {
     func presentDetailView(isPresented: Binding<Bool>) -> some View {
-        let coordinator = NavigationDetailCoordinator(isPresented: isPresented)
+        let coordinator = RootMasterCoordinator(isPresented: isPresented)
         return coordinate(to: coordinator)
     }
 }
@@ -518,7 +540,7 @@ extension MasterCoordinator: Coordinator {
 final class RootMasterCoordinator: MasterCoordinator {
     private weak var window: UIWindow?
     
-    init(window: UIWindow) {
+    init(window: UIWindow?) {
         self.window = window
     }
     
@@ -579,6 +601,7 @@ final class MasterPresenter<C: MasterCoordinator>: MasterPresenting {
     
     init(coordinator: C) {
         self.coordinator = coordinator
+        self.viewModel = MasterViewModel(date: Date())
     }
   
     func onButtonPressed(isPresented: Binding<Bool>) -> some View { 
@@ -588,12 +611,30 @@ final class MasterPresenter<C: MasterCoordinator>: MasterPresenting {
 
 struct MasterView<T: MasterPresenting>: View {
     @ObservedObject var presenter: T
-  
+    
     var body: some View {
-        NavigationButton(contentView: Text("\(viewModel.date, formatter: dateFormatter)") ,
+        NavigationButton(contentView: Text("\(presenter.viewModel.date, formatter: dateFormatter)"),
                          navigationView: { isPresented in
-                             self.presenter.onButtonPressed(isPresented: $isPresented)
+                            self.presenter.onButtonPressed(isPresented: isPresented)
         })
+    }
+}
+
+struct NavigationButton<CV: View, NV: View>: View {
+    @State private var isPresented = false
+    
+    var contentView: CV
+    var navigationView: (Binding<Bool>) -> NV
+    
+    var body: some View {
+        Button(action: {
+            self.isPresented = true
+        }) {
+            contentView
+                .background(
+                    navigationView($isPresented)
+            )
+        }
     }
 }
 ```
@@ -661,7 +702,7 @@ Notice that we have to add a new `associatedtype` for every different view we wa
 ```swift
 protocol MasterCoordinator: Coordinator {}
 
-extension MasterCoordinator: Coordinator {
+extension MasterCoordinator {
     func presentDetailView1(isPresented: Binding<Bool>) -> some View {
         // here we decide here to which coordinator we'd like to navigate to
         let coordinator = NavigationDetailCoordinator(isPresented: isPresented)
@@ -700,7 +741,9 @@ I'm not going to add the "what we've done so far" bit here because it's starting
 
 We've learned how to extract that `NavigationLink` from our `MasterView` creating a handy new `NavigationButton` along the way. We saw how to setup our Coordinator so we can return SwiftUI Views from the `start()` function. We learned how to easily change presenting a view as a modal instead of in a navigation stack. And we also saw how to present several views from the same view.
 
-That's it! **We've completed part 2 of this series.** In the next post, part 3, we'll see how to reimplement our Coordinator protocol to store its identifier, parent and children. To do that, to create stored properies in protocol extensions, we'll create a mixin using the power of the Objective-C runtime, sounds cool? **Then stay tuned for part 3!**
+That's it! **We've completed part 2 of this series.** In the next post, part 3, we'll see how to reimplement our Coordinator protocol to store its identifier, parent and children. To do that, to create stored properies in protocol extensions, we'll create a mixin using the power of the Objective-C runtime, sounds cool? 
+
+**Go now to the next part of the series (part 3)!**: [https://lascorbe.com/posts/2020-04-29-MVPCoordinators-SwiftUI-part3](https://lascorbe.com/posts/2020-04-29-MVPCoordinators-SwiftUI-part3)
 
 I hope you liked [part 1](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1) and [part 2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2) covering my experience trying to decouple the navigation in SwftUI.
 
