@@ -520,7 +520,7 @@ protocol MasterCoordinator: Coordinator {}
 
 extension MasterCoordinator {
     func presentDetailView(isPresented: Binding<Bool>) -> some View {
-        let coordinator = RootMasterCoordinator(isPresented: isPresented)
+        let coordinator = NavigationDetailCoordinator(isPresented: isPresented)
         return coordinate(to: coordinator)
     }
 }
