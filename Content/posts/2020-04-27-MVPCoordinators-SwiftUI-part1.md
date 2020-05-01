@@ -2,7 +2,7 @@
 title: MVP + Coordinators in SwiftUI (part 1)
 timeToRead: 15 minutes
 date: 2020-04-27 12:00
-description: We'll learn how to set up an entire screen with the MVP pattern, we'll create a base Coordinator protocol, and implement our first 2 coordinators. We'll see how to wrap our view in a `NavigationView`, and how we can implement `NavigationLink` so it doesn't depend on anything else in the view. Are you ready? Tap me!
+description: We'll learn how to set up an entire screen with the MVP pattern, we'll create a base Coordinator protocol, and implement our first 2 coordinators. We'll see how to wrap our view in a NavigationView, and how we can implement NavigationLink so it doesn't depend on anything else in the view. Are you ready? Tap me!
 tags: swiftui, coordinator, mvp, article, series, part1
 ---
 
@@ -28,7 +28,9 @@ I'm not going to explain how coordinators work, [there're](https://khanlou.com/2
 
 One more thing before we get started. **I created this project thinking in a big app, with testing in mind.** That's why you'll see an interface for most of the types (aka protocols), so everything can be mocked and tested.
 
-Anyway, let's go for it, are you ready? Then create a new project and let's make our first view. **In the next section I'm going to explain how to set up our 1st screen with MVP (Model-View-Presenter)**.
+**In this part, part 1**, we're going to learn how to set up an entire screen with the MVP pattern, we'll create a base `Coordinator` protocol, and implement our first 2 coordinators. We'll see how to wrap our view in a NavigationView, and how we can implement NavigationLink so it doesn't depend on anything else in the view.
+
+In the next section, we're going to see how to set up our 1st screen with MVP (Model-View-Presenter). Create a new project/playground and let's make our first view. 
 
 ## 1. ⌨️ Setting up our first screen with MVP
 
@@ -523,7 +525,7 @@ struct MasterView: View {
 
 We've learned how to set up an entire screen with the MVP pattern, we created a base Coordinator protocol, and implemented our first 2 coordinators. We saw how to wrap our view in a `NavigationView`, and how to implement `NavigationLink` so it doesn't depend on anything else in the view.
 
-That's it! **We've completed part 1 of this series.** In the next post we're going to see how to extract that `NavigationLink`  from `MasterView` and put it in a new Coordinator. We'll have to modify our current base Coordinator protocol, and we're going to see how to easily change from a navigation push to a modal presentation without touching the view, are you going to miss it? **Then head over to part 2!** 
+That's it! **We've completed part 1 of this series.** In the next post we're going to see how to extract that `NavigationLink`  from `MasterView` and put it in a new coordinator. We'll have to modify our current base `Coordinator` protocol, and we're going to see how to easily change from a navigation push to a modal presentation without touching the view, are you going to miss it? **Then head over to part 2!** 
 
 **Go now to the next part of the series (part 2)!**: [https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2)
 

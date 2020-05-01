@@ -2,7 +2,7 @@
 title: MVP + Coordinators in SwiftUI (part 2)
 timeToRead: 15 minutes
 date: 2020-04-28 13:00
-description: We'll see how to extract `NavigationLink` from `MasterView`. How to set up our Coordinator so we can return SwiftUI Views from the `start()` function. How to easily change presenting a view as a modal instead of in a navigation stack. And we'll take a look at how to present several views from the same view. Let's go!
+description: We'll see how to extract NavigationLink from MasterView. How to set up our Coordinator so we can return SwiftUI Views from the start function. How to easily change presenting a view as a modal instead of in a navigation stack. And we'll take a look at how to present several views from the same view. Let's go!
 tags: swiftui, coordinator, mvp, article, series, part2
 ---
 
@@ -12,9 +12,9 @@ tags: swiftui, coordinator, mvp, article, series, part2
 
 Welcome back! This is the second part of the blog posts on creating an MVP+Coordinators app with SwiftUI. **If you're looking for the first part, please go here instead:** [lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1).
 
-**In the 1st part**, we learned how to set up an entire screen with the MVP pattern, we created a base Coordinator protocol, and implemented our first 2 coordinators. We saw how to wrap our view in a `NavigationView`, and how to implement `NavigationLink` so it doesn't depend on anything else in the view.
+**In the 1st part**, we learned how to set up an entire screen with the MVP pattern, we created a base `Coordinator` protocol, and implemented our first 2 coordinators. We saw how to wrap our view in a `NavigationView`, and how to implement `NavigationLink` so it doesn't depend on anything else in the view.
 
-**In this part, part 2**, we're going to see how to extract that `NavigationLink` from `MasterView`. We'll see how to set up our Coordinator so we can return SwiftUI Views from the `start()` function. We'll learn how to easily change presenting a view as a modal instead of in a navigation stack. And we'll take a look at how to present several views from the same view.
+**In this part, part 2**, we're going to see how to extract that `NavigationLink` from `MasterView`. We'll see how to set up our `Coordinator` so we can return SwiftUI Views from the `start()` function. We'll learn how to easily change presenting a view as a modal instead of in a navigation stack. And we'll take a look at how to present several views from the same view.
 
 Here's what we completed in [the first part of this series](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1), our starting point for this second part:
 
@@ -739,9 +739,9 @@ I'm not going to add the "what we've done so far" bit here because it's starting
 
 ## 🏁 Conclusion
 
-We've learned how to extract that `NavigationLink` from our `MasterView` creating a handy new `NavigationButton` along the way. We saw how to set up our Coordinator so we can return SwiftUI Views from the `start()` function. We learned how to easily change presenting a view as a modal instead of in a navigation stack. And we also saw how to present several views from the same view.
+We've learned how to extract that `NavigationLink` from our `MasterView` creating a handy new `NavigationButton` along the way. We saw how to set up our `Coordinator` so we can return SwiftUI Views from the `start()` function. We learned how to easily change presenting a view as a modal instead of in a navigation stack. And we also saw how to present several views from the same view.
 
-**That's it! We've completed part 2 of this series.** In the next post, part 3, we'll see how to reimplement our Coordinator protocol to store its identifier, parent and children. To do that, to create stored properies in protocol extensions, we'll create a mixin using the power of the Objective-C runtime, sounds cool? 
+**That's it! We've completed part 2 of this series.** In the next post, part 3, we'll see how to reimplement our `Coordinator` protocol to store its identifier, parent and children. To do that, to create stored properies in protocol extensions, we'll create a mixin using the power of the Objective-C runtime, sounds cool? 
 
 **Next part of the series (part 3)!**: [https://lascorbe.com/posts/2020-04-29-MVPCoordinators-SwiftUI-part3](https://lascorbe.com/posts/2020-04-29-MVPCoordinators-SwiftUI-part3)
 
