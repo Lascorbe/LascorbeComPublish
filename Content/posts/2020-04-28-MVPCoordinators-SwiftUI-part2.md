@@ -69,7 +69,7 @@ final class RootMasterCoordinator: MasterCoordinator {
 // MARK: Factory
 
 enum MasterFactory {
-    static func make(with coordinator: Coordinator) -> some View {
+    static func make(with coordinator: MasterCoordinator) -> some View {
         let presenter = MasterPresenter(coordinator: coordinator)
         let view = MasterView(presenter: presenter)
         return view
@@ -97,8 +97,8 @@ final class MasterPresenter: MasterPresenting {
     }
 }
 
-struct MasterView: View {
-    @ObservedObject var presenter: MasterPresenting
+struct MasterView<T: MasterPresenting>: View {
+    @ObservedObject var presenter: T
   
     @State private var isPresented = false
   
@@ -106,7 +106,7 @@ struct MasterView: View {
         Button(action: {
             self.isPresented = true
         }) {
-            Text("\(viewModel.date, formatter: dateFormatter)") 
+            Text("\(presenter.viewModel.date, formatter: dateFormatter)") 
                 .background(
                     // this is the cool part
                     NavigationLink(destination: EmptyView(), isActive: $isPresented) {
@@ -123,8 +123,8 @@ struct MasterView: View {
 The last thing we did in *[part 1](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1)* was moving `NavigationView` out of the `MasterView` and "hidding" `NavigationLink` as the background view of the Button's text:
 
 ```swift
-struct MasterView: View {
-    @ObservedObject var presenter: MasterPresenting
+struct MasterView<T: MasterPresenting>: View {
+    @ObservedObject var presenter: T
   
     @State private var isPresented = false
   
@@ -132,7 +132,7 @@ struct MasterView: View {
         Button(action: {
             self.isPresented = true
         }) {
-            Text("\(viewModel.date, formatter: dateFormatter)") 
+            Text("\(presenter.viewModel.date, formatter: dateFormatter)") 
                 .background(
                     NavigationLink(destination: EmptyView(), isActive: $isPresented) {
                         EmptyView()
@@ -170,11 +170,11 @@ Our new `NavigationButton` accepts one view, to present it as the button's conte
 This is how our `MasterView` looks now:
 
 ```swift
-struct MasterView: View {
-    @ObservedObject var presenter: MasterPresenting
+struct MasterView<T: MasterPresenting>: View {
+    @ObservedObject var presenter: T
   
     var body: some View {
-        NavigationButton(contentView: Text("\(viewModel.date, formatter: dateFormatter)") ,
+        NavigationButton(contentView: Text("\(presenter.viewModel.date, formatter: dateFormatter)") ,
                          navigationView: { isPresented in
                              NavigationLink(destination: EmptyView(), isActive: $isPresented) {
                                  EmptyView()
@@ -189,7 +189,7 @@ We switched the `Button` that was there before with our newly created `Navigatio
 Now we can extract `NavigationLink`! Let's define what we really would like to have in the button in `MasterView`:
 
 ```swift
-NavigationButton(contentView: Text("\(viewModel.date, formatter: dateFormatter)") ,
+NavigationButton(contentView: Text("\(presenter.viewModel.date, formatter: dateFormatter)") ,
                  navigationView: { isPresented in
                      self.presenter.onButtonPressed(isPresented: $isPresented)
 })
@@ -225,21 +225,9 @@ final class MasterPresenter: MasterPresenting {
 
 We have to return a SwiftUI View, which can only be used as a generic constraint, so we need to add an `associatedtype` in our `MasterPresenting` protocol. Notice how with the `some` keyword in `MasterPresenter` we don't have to specify the `associatedtype`.
 
-Also, take a look at `coordinator.presentDetailView(:)`, it's returning a View. 
+Perfect, take a look at `coordinator.presentDetailView(:)`, it's returning a View. Now we can go to `MasterPresenter`'s coordinator and add the `presentDetailView` function. 
 
-We're going there next but first, we have to modify our `MasterView`, because is using a generic protocol now:
-
-```swift
-struct MasterView<T: MasterPresenting>: View { // hi there T!
-    @ObservedObject var presenter: T
-  
-    {...}
-}
-```
-
-We still don't want `MasterView` to know what `MasterPresenting` we are injecting, so let's keep using the `MasterPresenting` protocol, this time as a generic one (`<T: MasterPresenting>`).
-
-Perfect, now we can go to `MasterPresenter`'s coordinator and add the `presentDetailView` function. Remember we had a `MasterCoordinator` protocol which was empty? Not anymore:
+Remember we had a `MasterCoordinator` protocol which was empty? Not anymore:
 
 ```swift
 protocol MasterCoordinator: Coordinator {}
@@ -357,7 +345,7 @@ final class NavigationDetailCoordinator: DetailCoordinator {
 // MARK: Factory
 
 enum MasterFactory {
-    static func make(with coordinator: Coordinator) -> some View {
+    static func make(with coordinator: MasterCoordinator) -> some View {
         let presenter = MasterPresenter(coordinator: coordinator)
         let view = MasterView(presenter: presenter)
         return view
@@ -382,7 +370,7 @@ final class MasterPresenter: MasterPresenting {
     private let coordinator: MasterCoordinator
     
     init(coordinator: MasterCoordinator) {
-        self.coordinator = coordinator
+        self.coordinator = coordinator 
         self.viewModel = MasterViewModel(date: Date())
     }
   

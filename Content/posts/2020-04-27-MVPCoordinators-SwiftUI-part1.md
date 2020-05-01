@@ -62,7 +62,7 @@ protocol MasterPresenting: ObservableObject { // Notice conformance to Observabl
 }
 
 final class MasterPresenter: MasterPresenting {
-    @Published private(set) var viewModel: MasterViewModel
+    @Published private(set) var viewModel = MasterViewModel(date: Date())
 }
 ```
 
@@ -77,12 +77,24 @@ struct MasterView: View {
     @ObservedObject var presenter: MasterPresenting // check out @ObservedObject
   
     var body: some View {
-        Text("\(viewModel.date, formatter: dateFormatter)")
+        Text("\(presenter.viewModel.date, formatter: dateFormatter)")
     }
 }
 ```
 
 To bind this view to the presenter we need the `@ObservedObject` property wrapper. `dateFormatter` is just a global `DateFormatter` defined somewhere else. Now our view is "listening" for whenever our `viewModel` changes!
+
+But since `MasterPresenting` is conforming to `ObservableObject`, it is a generic protocol. So we have to tell that to the view:
+
+```swift
+struct MasterView<T: MasterPresenting>: View { // hi there T!
+    @ObservedObject var presenter: T
+  
+    {...}
+}
+```
+
+We still don't want `MasterView` to know what `MasterPresenting` we are injecting, so let's keep using the `MasterPresenting` protocol, this time as a generic one (`<T: MasterPresenting>`).
 
 We've completed the MVP part of our first screen. **In the next section we're going to define our base Coordinator type and define our first 2 coordinators**.
 
@@ -98,14 +110,14 @@ protocol MasterPresenting: ObservableObject {
 }
 
 final class MasterPresenter: MasterPresenting {
-    @Published private(set) var viewModel: MasterViewModel
+    @Published private(set) var viewModel = MasterViewModel(date: Date())
 }
 
-struct MasterView: View {
-    @ObservedObject var presenter: MasterPresenting
+struct MasterView<T: MasterPresenting>: View {
+    @ObservedObject var presenter: T
   
     var body: some View {
-        Text("\(viewModel.date, formatter: dateFormatter)")
+        Text("\(presenter.viewModel.date, formatter: dateFormatter)")
     }
 }
 ```
@@ -204,7 +216,7 @@ There's an interesting line in `RootMasterCoordinator`, what's behind that `Mast
 
 ```swift
 enum MasterFactory {
-    static func make(with coordinator: Coordinator) -> some View {
+    static func make(with coordinator: MasterCoordinator) -> some View {
         let presenter = MasterPresenter(coordinator: coordinator)
         let view = MasterView(presenter: presenter)
         return view
@@ -224,7 +236,8 @@ final class MasterPresenter: MasterPresenting {
     
     init(coordinator: MasterCoordinator) {
         self.coordinator = coordinator
-        // You may want to bind your viewModel to a service/DB here, maybe using Combine/RxSwift
+        self.viewModel = MasterViewModel(date: Date())
+        // You may want to bind your ViewModel to a service/DB here, maybe using Combine/RxSwift
     }
 }
 ```
@@ -285,7 +298,7 @@ final class RootMasterCoordinator: MasterCoordinator {
 // MARK: Factory
 
 enum MasterFactory {
-    static func make(with coordinator: Coordinator) -> some View {
+    static func make(with coordinator: MasterCoordinator) -> some View {
         let presenter = MasterPresenter(coordinator: coordinator)
         let view = MasterView(presenter: presenter)
         return view
@@ -309,14 +322,15 @@ final class MasterPresenter: MasterPresenting {
     
     init(coordinator: MasterCoordinator) {
         self.coordinator = coordinator
+        self.viewModel = MasterViewModel(date: Date())
     }
 }
 
-struct MasterView: View {
-    @ObservedObject var presenter: MasterPresenting
+struct MasterView<T: MasterPresenting>: View {
+    @ObservedObject var presenter: T
   
     var body: some View {
-        Text("\(viewModel.date, formatter: dateFormatter)")
+        Text("\(presenter.viewModel.date, formatter: dateFormatter)")
     }
 }
 ```
@@ -326,13 +340,13 @@ struct MasterView: View {
 Now that we have our MVP and Coordinators in place, let's go to `MasterView` and see how we can navigate to another view with `NavigationLink`:
 
 ```swift
-struct MasterView: View {
-    @ObservedObject var presenter: MasterPresenting
+struct MasterView<T: MasterPresenting>: View {
+    @ObservedObject var presenter: T
   
     var body: some View {
         NavigationView {
             NavigationLink(destination: EmptyView()) {
-                Text("\(viewModel.date, formatter: dateFormatter)")  
+                Text("\(presenter.viewModel.date, formatter: dateFormatter)")  
             }
         }
     }
@@ -362,13 +376,13 @@ final class RootMasterCoordinator: MasterCoordinator {
     }
 }
 
-struct MasterView: View {
-    @ObservedObject var presenter: MasterPresenting
+struct MasterView<T: MasterPresenting>: View {
+    @ObservedObject var presenter: T
   
     var body: some View {
         // NavigationView is no longer here
         NavigationLink(destination: EmptyView()) {
-            Text("\(viewModel.date, formatter: dateFormatter)")  
+            Text("\(presenter.viewModel.date, formatter: dateFormatter)")  
         }
     }
 }
@@ -377,12 +391,12 @@ struct MasterView: View {
 Better. Next, we're going to move `NavigationLink` out too. It should be a function we can call on the presenter, something like:
 
 ```swift
-struct MasterView: View {
-    @ObservedObject var presenter: MasterPresenting
+struct MasterView<T: MasterPresenting>: View {
+    @ObservedObject var presenter: T
   
     var body: some View {
         presenter.presentSuperAmazingView {
-            Text("\(viewModel.date, formatter: dateFormatter)")  
+            Text("\(presenter.viewModel.date, formatter: dateFormatter)")  
         }
     }
 }
@@ -395,8 +409,8 @@ The way to present a modal is with a view modifier called `.sheet`. That's right
 Anyway, how can we avoid this nicely? The best way I found is [using a `.background` view inside a Button's content](https://stackoverflow.com/a/61188788/736384). It's better to see it in code, so now our `MasterView` looks like this:
 
 ```swift
-struct MasterView: View {
-    @ObservedObject var presenter: MasterPresenting
+struct MasterView<T: MasterPresenting>: View {
+    @ObservedObject var presenter: T
   
     @State private var isPresented = false
   
@@ -404,7 +418,7 @@ struct MasterView: View {
         Button(action: {
             self.isPresented = true
         }) {
-            Text("\(viewModel.date, formatter: dateFormatter)") 
+            Text("\(presenter.viewModel.date, formatter: dateFormatter)") 
                 .background(
                     // this is the cool part
                     NavigationLink(destination: EmptyView(), isActive: $isPresented) {
@@ -443,7 +457,7 @@ final class AppCoordinator: Coordinator {
     init(window: UIWindow) {
         self.window = window
     }
-  
+    
     func start() {
         let coordinator = RootMasterCoordinator(window: window)
         coordinate(to: coordinator)
@@ -473,7 +487,7 @@ final class RootMasterCoordinator: MasterCoordinator {
 // MARK: Factory
 
 enum MasterFactory {
-    static func make(with coordinator: Coordinator) -> some View {
+    static func make(with coordinator: MasterCoordinator) -> some View {
         let presenter = MasterPresenter(coordinator: coordinator)
         let view = MasterView(presenter: presenter)
         return view
@@ -497,25 +511,25 @@ final class MasterPresenter: MasterPresenting {
     
     init(coordinator: MasterCoordinator) {
         self.coordinator = coordinator
+        self.viewModel = MasterViewModel(date: Date())
     }
 }
 
-struct MasterView: View {
-    @ObservedObject var presenter: MasterPresenting
-  
+struct MasterView<T: MasterPresenting>: View {
+    @ObservedObject var presenter: T
+    
     @State private var isPresented = false
-  
+    
     var body: some View {
         Button(action: {
             self.isPresented = true
         }) {
-            Text("\(viewModel.date, formatter: dateFormatter)") 
+            Text("\(presenter.viewModel.date, formatter: dateFormatter)")
                 .background(
-                    // this is the cool part
                     NavigationLink(destination: EmptyView(), isActive: $isPresented) {
                         EmptyView()
                     }
-                )
+            )
         }
     }
 }
