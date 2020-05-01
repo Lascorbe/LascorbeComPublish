@@ -2,7 +2,7 @@
 title: MVP + Coordinators in SwiftUI (part 3)
 timeToRead: 15 minutes
 date: 2020-04-29 13:00
-description: Blog series on exploring a MVP+Coordinators approach in SwiftUI without using UIKit. 3rd part.
+description: We'll reimplement the Coordinator protocol to store the identifier, parent and children of the coordinators, so we can complete the implementation of the coodinator pattern. And we'll also deal with a bit of memory management so we don't create retain cycles. Join us!
 tags: swiftui, coordinator, mvp, article, series, part3, mixin, associatedobject
 ---
 
@@ -12,13 +12,13 @@ tags: swiftui, coordinator, mvp, article, series, part3, mixin, associatedobject
 
 Welcome back! This is the 3rd part of the series on creating an MVP+Coordinators app in SwiftUI. If you're **looking for the 1st part**, please go here: [lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1). If you're **looking for the 2nd part instead**, please go here: [lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2).
 
-**In part 1**, we learned how to set up an entire screen with the MVP pattern, we created our base `Coordinator` and our first two coordinators. We saw how to wrap our view in a `NavigationView` and how to implement `NavigationLink` so it doesn't depend of anything else in the view.
+**In part 1**, we learned how to set up an entire screen with the MVP pattern, we created a base Coordinator protocol, and implemented our first 2 coordinators. We saw how to wrap our view in a `NavigationView`, and how to implement `NavigationLink` so it doesn't depend on anything else in the view.
 
-**In part 2**, we learned how to extract `NavigationLink` from `MasterView` creating a handy new `NavigationButton` along the way. We saw how to setup the Coordinator protocol so we can return SwiftUI Views from the `start()` function. We learned how to change presenting a view as a modal instead of in a navigation stack. And we also saw how to present several views from the same view.
+**In part 2**, we learned how to extract that `NavigationLink` from our `MasterView` creating a handy new `NavigationButton` along the way. We saw how to set up our Coordinator so we can return SwiftUI Views from the `start()` function, and how to easily change presenting a view as a modal instead of in a navigation stack. And we took a look at how to present several views from the same view.
 
-**In this part, the 3rd one**, we're going to reimplement our Coordinator protocol to store the identifier, parent and children of the coordinators. We'll also deal with a bit of memory management so we don't create retain cycles. Are you ready? Let's go!
+**In this part, the 3rd one**, we're going to reimplement our Coordinator protocol to store the identifier, parent and children of the coordinators, so we can complete the implementation of the coodinator pattern. And we'll also deal with a bit of memory management so we don't create retain cycles. Are you ready? Let's go!
 
-This is what we completed on [part 1](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1) and [part 2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2):
+This is what we completed in [part 1](https://lascorbe.com/posts/2020-04-27-MVPCoordinators-SwiftUI-part1) and [part 2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2):
 
 ```swift
 // MARK: Coordinator
