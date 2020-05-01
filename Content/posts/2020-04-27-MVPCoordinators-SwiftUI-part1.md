@@ -2,13 +2,15 @@
 title: MVP + Coordinators in SwiftUI (part 1)
 timeToRead: 15 minutes
 date: 2020-04-27 12:00
-description: We'll learn how to set up an entire screen with the MVP pattern, we'll create a base Coordinator protocol, and implement our first 2 coordinators. We'll see how to wrap our view in a `NavigationView`, and how we can implement `NavigationLink` so it doesn't depend on anything else in the view. Are you ready? Just press start!
+description: We'll learn how to set up an entire screen with the MVP pattern, we'll create a base Coordinator protocol, and implement our first 2 coordinators. We'll see how to wrap our view in a `NavigationView`, and how we can implement `NavigationLink` so it doesn't depend on anything else in the view. Are you ready? Tap me!
 tags: swiftui, coordinator, mvp, article, series, part1
 ---
 
 ![](/images/posts/2020-04-26-MVPCoordinators-SwiftUI/1.jpg)
 
 *Public repo: For those of you who want to check out the code right away here is the repo: [https://github.com/Lascorbe/SwiftUI-MVP-Coordinator](https://github.com/Lascorbe/SwiftUI-MVP-Coordinator).*
+
+*Note: This is a blog series of 3 parts. This is the first part, and here is [part 2](https://lascorbe.com/posts/2020-04-28-MVPCoordinators-SwiftUI-part2) and [part 3](https://lascorbe.com/posts/2020-04-29-MVPCoordinators-SwiftUI-part3).*
 
 **I didn't want to do much on SwiftUI until the next version is announced** due to my previous experience with Swift, I mean, it'll likely introduce a lot of breaking changes. I still remember the pain of migrating between Swift versions (Swift 3 to 4 anyone?), and I didn't want to live that again.
 
