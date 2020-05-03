@@ -24,7 +24,7 @@ jobs:
         allow_empty_commit: false
         build_dir: Output
         committer_name: lascorbe 
-        commit_message: Generate website to Output
+        commit_message: Publish deploy from LascorbeCom
       env:
         GITHUB_PAT: ${{ secrets.DEPLOYMENT_TOKEN }}
         
