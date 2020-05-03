@@ -2,25 +2,34 @@ name: Build and Deploy lascorbe.com
 
 on:
   push:
-    branches:
-      - master
-    tags:
-      - "*"
+    branches: [ master ]
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-18.04
+  build:
+    runs-on: macOS-latest
+
     steps:
-      - name: Checkout Source
-        uses: actions/checkout@v1
-      - name: Build Site
-        run: swift run LascorbeCom
-      - name: Deploy Content
-        uses: peaceiris/actions-gh-pages@v2
-        env:
-          PERSONAL_TOKEN: ${{ secrets.DEPLOYMENT_TOKEN }}
-          EXTERNAL_REPOSITORY: lascorbe/lascorbe.github.io
-          PUBLISH_BRANCH: master
-          PUBLISH_DIR: ./Output
-        with:
-          commitMessage: ${{ github.event.head_commit.message }}
+    - name: Checkout Source
+      uses: actions/checkout@v2
+      
+    - name: Generate blog
+      run: swift run LascorbeCom
+      
+    - name: Publish deploy
+      uses: crazy-max/ghaction-github-pages@v1.4.0
+      with:
+        repo: lascorbe/lascorbe.github.io
+        target_branch: master
+        keep_history: true
+        allow_empty_commit: false
+        build_dir: Output
+        committer_name: lascorbe 
+        commit_message: Generate website to Output
+      env:
+        GITHUB_PAT: ${{ secrets.DEPLOYMENT_TOKEN }}
+        
+    - name: Add & Commit changes
+      uses: EndBug/add-and-commit@v4.0.1
+      with:
+        author_name: lascorbe
+        message: Commit Output
