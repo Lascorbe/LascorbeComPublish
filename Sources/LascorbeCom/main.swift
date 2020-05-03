@@ -16,7 +16,7 @@ struct LascorbeCom: Website {
 
     var url = URL(string: "https://lascorbe.com")!
     var name = "Luis Ascorbe"
-    var description = "Software Developer. Tech Lead. Speaker. Conference Organizer."
+    var description = "Software Developer. Tech Lead. Speaker. NSSpain Organizer."
     var language: Language { .english }
     var imagePath: Path? { "/android-chrome-512x512.png" }
     var socialMedia: [SocialMedia] { [.email, .github, .twitter, .linkedIn] }
