@@ -5,6 +5,7 @@
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://opensource.org/licenses/MIT)
 [![Twitter](https://img.shields.io/badge/twitter-@lascorbe-blue.svg)](http://twitter.com/lascorbe)
 
-Project to generate lascorbe.com using Publish by John Sundell.
+Project to generate [lascorbe.com](https://lascorbe.com) using Publish by John Sundell.
 
-Clone the project and run `publish run` from root (install Publish if you didn't yet).
+- `publish run` runs the project locally
+- `publish deploy` deploys to lascorbe.github.io
