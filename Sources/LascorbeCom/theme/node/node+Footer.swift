@@ -19,8 +19,7 @@ extension Node where Context == HTML.BodyContext {
                     .text("Publish"),
                     .href("https://github.com/johnsundell/publish"),
                     .target(.blank)
-                ),
-                .text(". 100% JavaScript-free.")
+                )
             ),
             .div(
                 .class("pure-u-1"),
